@@ -1,0 +1,199 @@
+---
+- name: Configure macOS defaults
+  hosts: localhost
+  tasks:
+    - name: Show all files in Finder
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: AppleShowAllFiles
+        type: str
+        value: true
+      notify: Restart Finder
+
+    - name: Play feedback when volume is changed
+      community.general.osx_defaults:
+        domain: NSGlobalDomain
+        key: com.apple.sound.beep.feedback
+        type: int
+        value: 1
+
+    - name: Click in the scrollbar to jump to the spot that's clicked
+      community.general.osx_defaults:
+        domain: NSGlobalDomain
+        key: AppleScrollerPagingBehavior
+        type: bool
+        value: true
+
+    - name: Enable Three Finger Drag
+      community.general.osx_defaults:
+        domain: com.apple.AppleMultitouchTrackpad
+        key: TrackpadThreeFingerDrag
+        type: bool
+        value: true
+
+    # Control Centre
+    - name: Show Bluetooth in Menu Bar
+      community.general.osx_defaults:
+        domain: com.apple.controlcenter
+        key: NSStatusItem Visible Bluetooth
+        type: bool
+        value: true
+
+    - name: Don't show Screen Mirroring in Menu Bar
+      community.general.osx_defaults:
+        domain: com.apple.airplay
+        key: showInMenuBarIfPresent
+        type: bool
+        value: false
+
+    - name: Always show Sound in Menu Bar
+      community.general.osx_defaults:
+        domain: com.apple.controlcenter
+        key: NSStatusItem Visible Sound
+        type: bool
+        value: true
+
+    - name: Don't show Now Playing in Menu Bar
+      community.general.osx_defaults:
+        domain: com.apple.airplay
+        key: NSStatusItem Visible NowPlaying
+        type: bool
+        value: false
+
+    - name: Show Date: Never
+      community.general.osx_defaults:
+        domain: com.apple.menuextra.clock
+        key: ShowDate
+        type: int
+        value: 2
+
+    - name: Show the day of the week
+      community.general.osx_defaults:
+        domain: com.apple.menuextra.clock
+        key: ShowDayOfWeek
+        type: bool
+        value: false
+
+    - name: Don't show Spotlight in Menu Bar
+      community.general.osx_defaults:
+        domain: com.apple.Spotlight
+        key: MenuItemHidden
+        type: int
+        value: 1
+
+    # Desktop & Dock
+    - name: Set Dock size
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: tilesize
+        type: int
+        value: 36
+      notify: Restart Dock
+
+    - name: Set Dock magnification size
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: largesize
+        type: int
+        value: 56
+      notify: Restart Dock
+
+    - name: Enable Dock magnification
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: magnification
+        type: bool
+        value: true
+      notify: Restart Dock
+
+    - name: Minimize windows using Scale effect
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: mineffect
+        type: str
+        value: scale
+      notify: Restart Dock
+
+    - name: Minimize windows into application icon
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: minimize-to-application
+        type: bool
+        value: true
+      notify: Restart Dock
+
+    - name: Automatically hide and show the Dock
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: autohide
+        type: bool
+        value: true
+      notify: Restart Dock
+
+    - name: Set Dock autohide time modifier
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: autohide-time-modifier
+        type: float
+        value: 0.4
+      notify: Restart Dock
+
+    - name: Set Dock autohide delay
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: autohide-delay
+        type: float
+        value: 0
+      notify: Restart Dock
+
+    - name: Hide recent applications in Dock
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: show-recents
+        type: bool
+        value: false
+      notify: Restart Dock
+
+    - name: Move the Dock to the left side
+      community.general.osx_defaults:
+        domain: com.apple.Dock
+        key: orientation
+        type: str
+        value: left
+      notify: Restart Dock
+
+    - name: Prefer tabs when opening documents
+      community.general.osx_defaults:
+        domain: NSGlobalDomain
+        key: AppleWindowTabbingMode
+        type: str
+        value: always
+
+    - name: Click Wallpaper to reveal desktop only in Stage Manager
+      community.general.osx_defaults:
+        domain: com.apple.WindowManager
+        key: EnableStandardClickToShowDesktop
+        type: bool
+        value: false
+      notify: Restart WindowManager
+
+    - name: Don't automatically rearrange Spaces based on most recent use
+      community.general.osx_defaults:
+        domain: com.apple.dock
+        key: mru-spaces
+        type: bool
+        value: false
+      notify: Restart Dock
+
+  handlers:
+    - name: Restart Dock
+      community.general.command: killall Dock
+      listen: Restart Dock
+
+    - name: Restart Finder
+      community.general.command: killall Finder
+      listen: Restart Finder
+
+    - name: Restart WindowManager
+      community.general.command: killall WindowManager
+      listen: Restart WindowManager
